@@ -186,14 +186,44 @@ function fromCSV(text: string): Expense[] {
 export default function ExpensesPage() {
   const [items, setItems] = useState<Expense[]>([]);
   const [query, setQuery] = useState("");
+  const [aiTips, setAiTips] = useState<string[]>([]);
+  const [asking, setAsking] = useState(false);
   const todayISO = new Date().toISOString().slice(0, 10);
 
   useEffect(() => { setItems(loadExpenses()); }, []);
   useEffect(() => { saveExpenses(items); }, [items]);
 
   function addExpense(e: Expense) {
-    setItems((prev) => [e, ...prev].sort((a, b) => (a.date < b.date ? 1 : -1)));
+    try {
+      // update UI immediately
+      setItems((prev) => {
+        const next = [e, ...prev].sort((a, b) => (a.date < b.date ? 1 : -1));
+        return next;
+      });
+      // best-effort forward to local “mesh” API (no UI block)
+      fetch("/api/mesh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "expense.add", payload: e }),
+      }).catch(() => {});
+    } catch {}
   }
+
+  async function askAiForExpenses() {
+    try {
+      setAsking(true);
+      const res = await fetch("/api/mesh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "expense.advise", payload: { items } }),
+      });
+      const data = await res.json();
+      setAiTips(data?.suggestions ?? []);
+    } finally {
+      setAsking(false);
+    }
+  }
+
   function updateExpense(id: string, patch: Partial<Expense>) {
     setItems((prev) => prev.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   }
@@ -246,7 +276,7 @@ export default function ExpensesPage() {
   }
 
   return (
-  <div className="mx-auto max-w-6xl space-y-6 p-6 bg-[var(--background)] text-[var(--foreground)]">
+    <div className="mx-auto max-w-6xl space-y-6 p-6 bg-[var(--background)] text-[var(--foreground)]">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
@@ -255,6 +285,9 @@ export default function ExpensesPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button onClick={askAiForExpenses} className="w-full sm:w-auto">
+            {asking ? "Thinking..." : "Ask AI"}
+          </Button>
           <Button onClick={exportCSV} className="w-full sm:w-auto" variant="ghost">Export CSV</Button>
           <label className="relative inline-flex items-center justify-center overflow-hidden rounded-xl
                              bg-neutral-100 dark:bg-neutral-800 px-3 py-2 text-sm font-medium
@@ -269,7 +302,7 @@ export default function ExpensesPage() {
         </div>
       </header>
 
-  <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
         <ExpenseForm onAdd={addExpense} defaultDate={todayISO} />
       </section>
 
@@ -292,7 +325,24 @@ export default function ExpensesPage() {
         </div>
       </section>
 
-  <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+      {/* AI suggestions */}
+      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+        <div className="mb-3 flex items-center justify-between">
+          <div className="text-sm font-medium">AI Suggestions</div>
+          <Button variant="ghost" onClick={askAiForExpenses} disabled={asking}>
+            {asking ? "Thinking..." : "Refresh"}
+          </Button>
+        </div>
+        {aiTips.length ? (
+          <ul className="list-disc pl-5 space-y-1 text-sm">
+            {aiTips.map((s, i) => <li key={i}>{s}</li>)}
+          </ul>
+        ) : (
+          <div className="text-sm text-[var(--foreground)]/60">No suggestions yet — click “Ask AI”.</div>
+        )}
+      </section>
+
+      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <Input
             placeholder="Search by description, category, or date yyyy-mm-dd"
