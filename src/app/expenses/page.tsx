@@ -328,32 +328,34 @@ export default function ExpensesPage() {
               Track spending alongside your productivity flows.
             </p>
           </div>
-          <div className="flex gap-3 items-center text-xs sm:text-sm">
-            <Button
-              onClick={askAiForExpenses}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
-              disabled={asking}
-            >
-              {asking ? "Thinking..." : "Ask AI"}
-            </Button>
-            <Link
-              href="/pomodoro"
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
-            >
-              Pomodoro
-            </Link>
-            <Link
-              href="/tasks"
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
-            >
-              Tasks
-            </Link>
-            <Link
-              href="/"
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
-            >
-              Home
-            </Link>
+          <div className="flex flex-col gap-2 sm:items-end w-full sm:w-auto">
+            <div className="flex gap-2 items-center text-xs sm:text-sm overflow-x-auto no-scrollbar -mx-2 px-2 sm:mx-0 sm:px-0">
+              <Button
+                onClick={askAiForExpenses}
+                className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+                disabled={asking}
+              >
+                {asking ? "Thinking..." : "Ask AI"}
+              </Button>
+              <Link
+                href="/pomodoro"
+                className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+              >
+                Pomodoro
+              </Link>
+              <Link
+                href="/tasks"
+                className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+              >
+                Tasks
+              </Link>
+              <Link
+                href="/"
+                className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+              >
+                Home
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -483,6 +485,9 @@ export default function ExpensesPage() {
         .date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.8); opacity: 0.9; }
         .date-input { color: #fff; caret-color: #fff; }
         :global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: none; }
+  /* hide scrollbar for horizontal nav scroller */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );

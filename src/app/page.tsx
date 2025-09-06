@@ -49,24 +49,12 @@ export default function LandingPage() {
         <section className="flex flex-col gap-10 lg:flex-row lg:items-center">
           <div className="flex-1 text-center lg:text-left space-y-6">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight animate-gradient-text bg-gradient-to-r from-indigo-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-lg">
-              Welcome to Productivity Playground
+              Welcome to Prodly!
             </h1>
             <p className="text-lg sm:text-2xl light:text-black max-w-3xl mx-auto lg:mx-0">
-              Supercharge your focus and finances with a playful Pomodoro Timer
-              and powerful Expense Tracker. Built to keep you engaged and in
-              control across every screen size.
+              The all-in-one AI productivity platform
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-              <Link href="/pomodoro" className="inline-block">
-                <button className="px-7 py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-indigo-500 to-pink-500 text-white shadow-lg hover:brightness-110 hover:scale-[1.03] active:scale-95 transition">
-                  Try Pomodoro Timer
-                </button>
-              </Link>
-              <Link href="/expenses" className="inline-block">
-                <button className="px-7 py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-yellow-400 to-pink-500 text-white shadow-lg hover:brightness-110 hover:scale-[1.03] active:scale-95 transition">
-                  Track Expenses
-                </button>
-              </Link>
             </div>
           </div>
         </section>
