@@ -306,6 +306,12 @@ export default function TaskManagerPage() {
 							Pomodoro
 						</Link>
 						<Link
+							href="/expenses"
+							className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+						>
+							Expenses
+						</Link>
+						<Link
 							href="/"
 							className="px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
 						>
