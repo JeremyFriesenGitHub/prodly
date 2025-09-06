@@ -447,7 +447,10 @@ export default function TaskManagerPage() {
 							<label className="text-[10px] font-semibold uppercase tracking-wide">Status</label>
 							<select
 								value={filterStatus}
-								onChange={(e) => setFilterStatus(e.target.value as any)}
+								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+									const v = e.target.value as "all" | "active" | "completed";
+									setFilterStatus(v);
+								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="all">All</option>
@@ -459,7 +462,10 @@ export default function TaskManagerPage() {
 							<label className="text-[10px] font-semibold uppercase tracking-wide">Priority</label>
 							<select
 								value={filterPriority}
-								onChange={(e) => setFilterPriority(e.target.value as any)}
+								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+									const v = e.target.value as Priority | "all";
+									setFilterPriority(v);
+								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="all">All</option>
@@ -472,7 +478,10 @@ export default function TaskManagerPage() {
 							<label className="text-[10px] font-semibold uppercase tracking-wide">Sort</label>
 							<select
 								value={sort}
-								onChange={(e) => setSort(e.target.value as any)}
+								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+									const v = e.target.value as "newest" | "due" | "priority";
+									setSort(v);
+								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="newest">Newest</option>
