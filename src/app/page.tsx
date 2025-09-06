@@ -1,227 +1,221 @@
 "use client";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
-import { useState, useRef, useEffect } from "react";
-
-const MODES = [
-  { name: "Pomodoro", duration: 25 * 60 },
-  { name: "Short Break", duration: 5 * 60 },
-  { name: "Long Break", duration: 15 * 60 },
-];
-
-function formatTime(seconds: number) {
-  const m = Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = (seconds % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
-
-export default function PomodoroApp() {
-  const [mode, setMode] = useState(0);
-  const [seconds, setSeconds] = useState(MODES[mode].duration);
-  const [isRunning, setIsRunning] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+export default function LandingPage() {
+  // particle state
+  const [mounted, setMounted] = useState(false);
+  const [particles, setParticles] = useState<
+    { key: number; className: string; style: React.CSSProperties }[]
+  >([]);
 
   useEffect(() => {
-    setSeconds(MODES[mode].duration);
-    setIsRunning(false);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  }, [mode]);
-
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setSeconds((sec) => {
-          if (sec > 0) return sec - 1;
-          setIsRunning(false);
-          return 0;
-        });
-      }, 1000);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [isRunning]);
+    setMounted(true);
+    const arr = Array.from({ length: 12 }, (_, i) => ({
+      key: i,
+      className: `absolute rounded-full bg-white/10 blur-lg animate-particle${
+        i % 3 + 1
+      }`,
+      style: {
+        width: `${16 + Math.random() * 24}px`,
+        height: `${16 + Math.random() * 24}px`,
+        top: `${Math.random() * 90}%`,
+        left: `${Math.random() * 90}%`,
+        opacity: 0.5 + Math.random() * 0.5,
+      },
+    }));
+    setParticles(arr);
+  }, []);
 
   return (
-  <div className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)] font-sans p-4 sm:p-8 overflow-hidden min-h-screen w-full h-full">
-      {/* Animated background shapes and particles */}
+  <div className="relative min-h-screen min-h-dvh w-full flex flex-col justify-center text-[var(--foreground)] overflow-hidden">
+      {/* === Shared Background from Pomodoro === */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Main gradient blobs */}
+        {/* Gradient blobs */}
         <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-[-120px] right-[-120px] w-[320px] h-[320px] bg-gradient-to-tr from-[#fca5a5] to-[#f87171] opacity-30 rounded-full blur-3xl animate-pulse" />
-        {/* Extra animated fire-like gradients */}
+        {/* Fire-like blobs */}
         <div className="absolute top-1/2 left-1/4 w-[180px] h-[180px] bg-gradient-to-br from-[#fbbf24] via-[#f87171] to-[#f43f5e] opacity-20 rounded-full blur-2xl animate-fire" />
         <div className="absolute bottom-1/3 right-1/4 w-[160px] h-[160px] bg-gradient-to-tr from-[#34d399] via-[#818cf8] to-[#fbbf24] opacity-20 rounded-full blur-2xl animate-fire2" />
-        {/* Animated floating particles - only render on client */}
-        {(() => {
-          type Particle = {
-            key: number;
-            className: string;
-            style: React.CSSProperties;
-          };
-          const [mounted, setMounted] = useState(false);
-          const [particles, setParticles] = useState<Particle[]>([]);
-          useEffect(() => {
-            setMounted(true);
-            const arr: Particle[] = Array.from({ length: 12 }, (_, i) => ({
-              key: i,
-              className: `absolute rounded-full bg-white/10 blur-lg animate-particle${i % 3 + 1}`,
-              style: {
-                width: `${16 + Math.random() * 24}px`,
-                height: `${16 + Math.random() * 24}px`,
-                top: `${Math.random() * 90}%`,
-                left: `${Math.random() * 90}%`,
-                opacity: 0.5 + Math.random() * 0.5,
-              },
-            }));
-            setParticles(arr);
-          }, []);
-          return mounted
-            ? particles.map((p) => <div key={p.key} className={p.className} style={p.style} />)
-            : null;
-        })()}
-      </div>
-  <div className="w-full flex flex-col items-center justify-center z-10">
-      {/* Animated background shapes */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-[-120px] right-[-120px] w-[320px] h-[320px] bg-gradient-to-tr from-[#fca5a5] to-[#f87171] opacity-30 rounded-full blur-3xl animate-pulse" />
+        {/* Floating particles */}
+        {mounted &&
+          particles.map((p) => (
+            <div key={p.key} className={p.className} style={p.style} />
+          ))}
       </div>
 
-  <h1 className="text-3xl sm:text-5xl font-extrabold mb-6 sm:mb-10 text-center drop-shadow-lg z-10 animate-fade-in animate-gradient-text bg-gradient-to-r from-[#818cf8] via-[#fca5a5] to-[#fbbf24] bg-clip-text text-transparent">Pomodoro Timer</h1>
-
-  <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-10 justify-center w-full z-10 animate-fade-in">
-        {MODES.map((m, i) => (
-          <button
-            key={m.name}
-            className={`flex-1 min-w-[100px] px-2 py-2 sm:px-4 sm:py-2 rounded-full border font-semibold text-xs sm:text-sm transition-all duration-300 ease-in-out shadow-lg ${
-              mode === i
-                ? "bg-foreground text-background scale-105 shadow-2xl"
-                : "bg-transparent border-foreground text-foreground hover:bg-foreground/10 hover:scale-105"
-            }`}
-            onClick={() => setMode(i)}
-            disabled={isRunning}
-            style={{ transition: "transform 0.2s, box-shadow 0.2s" }}
-          >
-            {m.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Animated timer */}
-      <div className="flex items-center justify-center w-full">
-        <div className="relative w-full flex items-center justify-center">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 rounded-full bg-gradient-to-tr from-[#818cf8] to-[#fca5a5] opacity-30 blur-2xl animate-pulse animate-spin-slow`} />
+      {/* === Foreground Content (Full Layout) === */}
+      <div className="relative z-10 w-full px-6 sm:px-12 lg:px-24 py-24 flex flex-col gap-16">
+        <section className="flex flex-col gap-10 lg:flex-row lg:items-center">
+          <div className="flex-1 text-center lg:text-left space-y-6">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight animate-gradient-text bg-gradient-to-r from-indigo-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-lg">
+              Welcome to Productivity Playground
+            </h1>
+            <p className="text-lg sm:text-2xl light:text-black max-w-3xl mx-auto lg:mx-0">
+              Supercharge your focus and finances with a playful Pomodoro Timer
+              and powerful Expense Tracker. Built to keep you engaged and in
+              control across every screen size.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+              <Link href="/pomodoro" className="inline-block">
+                <button className="px-7 py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-indigo-500 to-pink-500 text-white shadow-lg hover:brightness-110 hover:scale-[1.03] active:scale-95 transition">
+                  Try Pomodoro Timer
+                </button>
+              </Link>
+              <Link href="/expenses" className="inline-block">
+                <button className="px-7 py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-yellow-400 to-pink-500 text-white shadow-lg hover:brightness-110 hover:scale-[1.03] active:scale-95 transition">
+                  Track Expenses
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className="relative z-10">
-            <span className="block text-6xl sm:text-8xl lg:text-9xl font-mono mb-6 sm:mb-8 text-center w-full transition-all duration-500 ease-in-out animate-timer animate-gradient-text bg-gradient-to-r from-[#818cf8] via-[#fca5a5] to-[#fbbf24] bg-clip-text text-transparent">
-              {formatTime(seconds)}
-            </span>
+        </section>
+
+        <section aria-label="Feature Highlights" className="w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            <div
+              className="p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl"
+              role="region"
+              aria-label="Stay Focused"
+            >
+              <span className="text-4xl mb-2">🍅</span>
+              <h3 className="font-semibold text-xl text-indigo-700 dark:text-indigo-300">Stay Focused</h3>
+              <p className="text-sm mt-2 text-gray-700 dark:text-gray-200 text-center">
+                Use structured intervals to beat distractions and build deep work momentum.
+              </p>
+            </div>
+            <div
+              className="p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl"
+              role="region"
+              aria-label="Track Spending"
+            >
+              <span className="text-4xl mb-2">💸</span>
+              <h3 className="font-semibold text-xl text-pink-700 dark:text-pink-300">Track Spending</h3>
+              <p className="text-sm mt-2 text-gray-700 dark:text-gray-200 text-center">
+                Log expenses effortlessly and recognize patterns in your habits.
+              </p>
+            </div>
+            <div
+              className="p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl"
+              role="region"
+              aria-label="Celebrate Progress"
+            >
+              <span className="text-4xl mb-2">🎉</span>
+              <h3 className="font-semibold text-xl text-yellow-700 dark:text-yellow-300">Celebrate Progress</h3>
+              <p className="text-sm mt-2 text-gray-700 dark:text-gray-200 text-center">
+                See your streaks and wins to stay motivated every single day.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <footer className="text-xs text-center lg:text-left opacity-80 max-w-7xl mx-auto">
+          Made with <span className="font-bold">Next.js</span>, <span className="font-bold">React</span> & <span className="font-bold">TailwindCSS</span>
+        </footer>
       </div>
 
-  <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full max-w-xs lg:max-w-md justify-center z-10 animate-fade-in">
-        <button
-          className="w-full sm:w-auto px-4 sm:px-6 py-2 rounded bg-foreground text-background font-bold text-base sm:text-lg shadow-lg hover:bg-foreground/80 transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105"
-          onClick={() => setIsRunning((r) => !r)}
-        >
-          {isRunning ? "Pause" : seconds === 0 ? "Restart" : "Start"}
-        </button>
-        <button
-          className="w-full sm:w-auto px-4 sm:px-6 py-2 rounded bg-background border border-foreground text-foreground font-bold text-base sm:text-lg shadow-lg hover:bg-foreground hover:text-background transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105"
-          onClick={() => {
-            setSeconds(MODES[mode].duration);
-            setIsRunning(false);
-          }}
-          disabled={seconds === MODES[mode].duration && !isRunning}
-        >
-          Reset
-        </button>
-      </div>
-
-  <footer className="mt-8 sm:mt-12 text-xs text-center opacity-80 w-full z-10 animate-fade-in">
-        Made with Next.js, React & TailwindCSS
-      </footer>
-
-      {/* Custom keyframes for fade-in, timer, fire, and particles animation */}
+      {/* Animations */}
       <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.8s cubic-bezier(.4,0,.2,1) both;
-        }
-        @keyframes timer {
-          0% { letter-spacing: 0.1em; filter: blur(2px); opacity: 0.7; }
-          50% { letter-spacing: 0.05em; filter: blur(0.5px); opacity: 1; }
-          100% { letter-spacing: 0.1em; filter: blur(0px); opacity: 1; }
-        }
-        .animate-timer {
-          animation: timer 0.7s cubic-bezier(.4,0,.2,1);
-        }
-        @keyframes gradient-text {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
-        }
         .animate-gradient-text {
           background-size: 200% 200%;
           animation: gradient-text 2.5s ease-in-out infinite alternate;
         }
+        @keyframes gradient-text {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 100% 50%;
+          }
+        }
+        /* keep card enhancement */
+        .glass-card { box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18); }
         @keyframes fire {
-          0% { transform: scale(1) translateY(0); opacity: 0.7; }
-          50% { transform: scale(1.1) translateY(-10px); opacity: 1; }
-          100% { transform: scale(1) translateY(0); opacity: 0.7; }
+          0% {
+            transform: scale(1) translateY(0);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(1.1) translateY(-10px);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1) translateY(0);
+            opacity: 0.7;
+          }
         }
         .animate-fire {
           animation: fire 2.2s ease-in-out infinite;
         }
         @keyframes fire2 {
-          0% { transform: scale(1) translateY(0); opacity: 0.7; }
-          50% { transform: scale(1.15) translateY(10px); opacity: 1; }
-          100% { transform: scale(1) translateY(0); opacity: 0.7; }
+          0% {
+            transform: scale(1) translateY(0);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(1.15) translateY(10px);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1) translateY(0);
+            opacity: 0.7;
+          }
         }
         .animate-fire2 {
           animation: fire2 2.7s ease-in-out infinite;
         }
-        @keyframes spin-slow {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 12s linear infinite;
-        }
         @keyframes particle1 {
-          0% { transform: translateY(0) scale(1); opacity: 0.5; }
-          50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; }
-          100% { transform: translateY(0) scale(1); opacity: 0.5; }
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateY(-20px) scale(1.2);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.5;
+          }
         }
         .animate-particle1 {
           animation: particle1 3.2s ease-in-out infinite;
         }
         @keyframes particle2 {
-          0% { transform: translateY(0) scale(1); opacity: 0.5; }
-          50% { transform: translateY(20px) scale(0.8); opacity: 0.7; }
-          100% { transform: translateY(0) scale(1); opacity: 0.5; }
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateY(20px) scale(0.8);
+            opacity: 0.7;
+          }
+          100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.5;
+          }
         }
         .animate-particle2 {
           animation: particle2 2.7s ease-in-out infinite;
         }
         @keyframes particle3 {
-          0% { transform: translateX(0) scale(1); opacity: 0.5; }
-          50% { transform: translateX(20px) scale(1.1); opacity: 0.7; }
-          100% { transform: translateX(0) scale(1); opacity: 0.5; }
+          0% {
+            transform: translateX(0) scale(1);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateX(20px) scale(1.1);
+            opacity: 0.7;
+          }
+          100% {
+            transform: translateX(0) scale(1);
+            opacity: 0.5;
+          }
         }
         .animate-particle3 {
           animation: particle3 3.7s ease-in-out infinite;
         }
       `}</style>
-      </div>
     </div>
   );
 }
