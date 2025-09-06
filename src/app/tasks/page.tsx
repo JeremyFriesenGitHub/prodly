@@ -274,6 +274,16 @@ export default function TaskManagerPage() {
     );
   };
 
+  // add tag on Enter
+  function handleAddTag(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && tagInput.trim()) {
+      e.preventDefault();
+      const t = tagInput.trim();
+      if (!tags.includes(t)) setTags((prev) => [...prev, t]);
+      setTagInput("");
+    }
+  }
+
 	return (
 		<div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center overflow-hidden bg-[var(--background)] font-sans">
 			{/* Background */}
@@ -307,6 +317,13 @@ export default function TaskManagerPage() {
 						</div>
 					</div>
 					<div className="flex gap-3 items-center text-xs sm:text-sm">
+            <button
+              onClick={planMyDay}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+              disabled={planning}
+            >
+              {planning ? "Planning..." : "Plan my day"}
+            </button>
 						<Link
 							href="/pomodoro"
 							className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
@@ -523,6 +540,39 @@ export default function TaskManagerPage() {
 					</div>
 				</div>
 
+        {/* AI Day Plan */}
+        <section className="rounded-3xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl p-5 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wide">AI Day Plan</h3>
+            <button
+              onClick={planMyDay}
+              className="text-xs px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-500 to-pink-500 text-white"
+              disabled={planning}
+            >
+              {planning ? "Planning..." : "Refresh"}
+            </button>
+          </div>
+          {plan.length ? (
+            <ol className="space-y-2 text-sm">
+              {plan.map((b) => (
+                <li key={b.id} className="flex items-center justify-between">
+                  <span className="font-medium">{b.from}–{b.to}</span>
+                  <span className="mx-2">•</span>
+                  <span className="truncate">{b.title}</span>
+                  <span className="opacity-80 ml-2">({b.estimateMin}m)</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="text-sm opacity-80">No plan yet — click “Plan my day”.</div>
+          )}
+          {!!nudges.length && (
+            <ul className="mt-3 text-xs opacity-90 list-disc pl-4 space-y-1">
+              {nudges.map((n,i)=><li key={i}>{n}</li>)}
+            </ul>
+          )}
+        </section>
+
 				{/* Task List */}
 				<section aria-label="Tasks" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 text-white">
 					{filtered.map((task) => {
@@ -649,7 +699,6 @@ export default function TaskManagerPage() {
 				@keyframes particle1 { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; } 100% { transform: translateY(0) scale(1); opacity: 0.5; } }
 				.animate-particle1 { animation: particle1 3.2s ease-in-out infinite; }
 				@keyframes particle2 { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 50% { transform: translateY(20px) scale(0.8); opacity: 0.7; } 100% { transform: translateY(0) scale(1); opacity: 0.5; } }
-				.animate-particle2 { animation: particle2 2.7s ease-in-out infinite; }
 				@keyframes particle3 { 0% { transform: translateX(0) scale(1); opacity: 0.5; } 50% { transform: translateX(20px) scale(1.1); opacity: 0.7; } 100% { transform: translateX(0) scale(1); opacity: 0.5; } }
 				.animate-particle3 { animation: particle3 3.7s ease-in-out infinite; }
 				.stroke-gradient { stroke: url(#gradStroke); }

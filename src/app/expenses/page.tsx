@@ -225,12 +225,11 @@ export default function ExpensesPage() {
 
   function addExpense(e: Expense) {
     try {
-      // update UI immediately
       setItems((prev) => {
         const next = [e, ...prev].sort((a, b) => (a.date < b.date ? 1 : -1));
         return next;
       });
-      // best-effort forward to local “mesh” API (no UI block)
+      // forward to mesh (Solace Agent Mesh proxy)
       fetch("/api/mesh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -330,6 +329,13 @@ export default function ExpensesPage() {
             </p>
           </div>
           <div className="flex gap-3 items-center text-xs sm:text-sm">
+            <Button
+              onClick={askAiForExpenses}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+              disabled={asking}
+            >
+              {asking ? "Thinking..." : "Ask AI"}
+            </Button>
             <Link
               href="/pomodoro"
               className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
@@ -389,7 +395,7 @@ export default function ExpensesPage() {
               <div className="text-sm opacity-60 text-white">No data yet</div>
             )}
           </div>
-            <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
             <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80 text-white">By Month</div>
             {byMonth.length ? (
               <TinyBarChart data={byMonth} />
@@ -397,6 +403,23 @@ export default function ExpensesPage() {
               <div className="text-sm opacity-60 text-white">No data yet</div>
             )}
           </div>
+        </section>
+
+        {/* AI Suggestions */}
+        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="text-sm font-semibold tracking-wide uppercase opacity-80 text-white">AI Suggestions</div>
+            <Button variant="ghost" onClick={askAiForExpenses} disabled={asking}>
+              {asking ? "Thinking..." : "Refresh"}
+            </Button>
+          </div>
+          {aiTips.length ? (
+            <ul className="list-disc pl-5 space-y-1 text-sm text-white">
+              {aiTips.map((s, i) => <li key={i}>{s}</li>)}
+            </ul>
+          ) : (
+            <div className="text-sm opacity-60 text-white">No suggestions yet — click “Ask AI”.</div>
+          )}
         </section>
 
         {/* Table */}
