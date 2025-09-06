@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link"; // (kept if needed elsewhere; can remove if unused)
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ThemeToggle from "./theme-toggle"; // still used in NavBar (client)
 import NavBar from "./nav-bar";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
