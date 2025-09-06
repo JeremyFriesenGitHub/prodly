@@ -320,22 +320,28 @@ export default function TaskManagerPage() {
 					role="form"
 					aria-label="Add new task"
 				>
-					<div className="md:col-span-2 lg:col-span-2 flex flex-col gap-3">
-						<input
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							placeholder="Task title *"
-							className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
-							aria-label="Task title"
-						/>
-						<textarea
-							value={notes}
-							onChange={(e) => setNotes(e.target.value)}
-							placeholder="Notes (optional)"
-							rows={2}
-							className="w-full resize-none px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
-							aria-label="Task notes"
-						/>
+					<div className="md:col-span-2 lg:col-span-2 flex flex-col gap-4">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+							<span>Title</span>
+							<input
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								placeholder="Task title *"
+								className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
+								aria-label="Task title"
+							/>
+						</label>
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+							<span>Notes <span className="opacity-60 normal-case">(optional)</span></span>
+							<textarea
+								value={notes}
+								onChange={(e) => setNotes(e.target.value)}
+								placeholder="Notes..."
+								rows={2}
+								className="w-full resize-none px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
+								aria-label="Task notes"
+							/>
+						</label>
 					</div>
 					<div className="flex flex-col gap-3">
 						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
@@ -356,7 +362,7 @@ export default function TaskManagerPage() {
 								type="date"
 								value={due}
 								onChange={(e) => setDue(e.target.value)}
-								className="px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm"
+								className="date-input px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm"
 							/>
 						</label>
 					</div>
@@ -633,6 +639,10 @@ export default function TaskManagerPage() {
 				@keyframes particle3 { 0% { transform: translateX(0) scale(1); opacity: 0.5; } 50% { transform: translateX(20px) scale(1.1); opacity: 0.7; } 100% { transform: translateX(0) scale(1); opacity: 0.5; } }
 				.animate-particle3 { animation: particle3 3.7s ease-in-out infinite; }
 				.stroke-gradient { stroke: url(#gradStroke); }
+				/* Make native date picker icon appear white (light mode) */
+				.date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.8); opacity: 0.9; }
+				.date-input { color: #fff; caret-color: #fff; }
+				:global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: none; }
 			`}</style>
 			{/* Hidden SVG defs for gradient stroke */}
 			<svg width="0" height="0" className="absolute">
