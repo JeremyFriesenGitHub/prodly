@@ -93,23 +93,28 @@ export default function PomodoroApp() {
 
   <h1 className="text-3xl sm:text-5xl font-extrabold mb-6 sm:mb-10 text-center drop-shadow-lg z-10 animate-fade-in animate-gradient-text bg-gradient-to-r from-[#818cf8] via-[#fca5a5] to-[#fbbf24] bg-clip-text text-transparent">Pomodoro Timer</h1>
 
-  <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-10 justify-center w-full z-10 animate-fade-in">
-        {MODES.map((m, i) => (
+  <div className="mb-6 sm:mb-10 w-full flex justify-center z-10 animate-fade-in">
+    <div className="inline-flex gap-1 rounded-full border border-foreground/20 bg-foreground/5 backdrop-blur px-1 py-1 shadow-sm">
+      {MODES.map((m, i) => {
+        const active = mode === i;
+        return (
           <button
             key={m.name}
-            className={`flex-1 min-w-[100px] px-2 py-2 sm:px-4 sm:py-2 rounded-full border font-semibold text-xs sm:text-sm transition-all duration-300 ease-in-out shadow-lg ${
-              mode === i
-                ? "bg-foreground text-background scale-105 shadow-2xl"
-                : "bg-transparent border-foreground text-foreground hover:bg-foreground/10 hover:scale-105"
-            }`}
             onClick={() => setMode(i)}
             disabled={isRunning}
-            style={{ transition: "transform 0.2s, box-shadow 0.2s" }}
+            className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap relative focus:outline-none focus:ring-2 focus:ring-foreground/40 disabled:cursor-not-allowed ${
+              active
+                ? "bg-foreground text-background shadow hover:shadow-md"
+                : "text-foreground/70 hover:text-foreground hover:bg-foreground/10"
+            }`}
+            aria-pressed={active}
           >
             {m.name}
           </button>
-        ))}
-      </div>
+        );
+      })}
+    </div>
+  </div>
 
       {/* Animated timer */}
       <div className="flex items-center justify-center w-full">
@@ -125,24 +130,24 @@ export default function PomodoroApp() {
         </div>
       </div>
 
-  <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full max-w-xs lg:max-w-md justify-center z-10 animate-fade-in">
-        <button
-          className="w-full sm:w-auto px-4 sm:px-6 py-2 rounded bg-foreground text-background font-bold text-base sm:text-lg shadow-lg hover:bg-foreground/80 transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105"
-          onClick={() => setIsRunning((r) => !r)}
-        >
-          {isRunning ? "Pause" : seconds === 0 ? "Restart" : "Start"}
-        </button>
-        <button
-          className="w-full sm:w-auto px-4 sm:px-6 py-2 rounded bg-background border border-foreground text-foreground font-bold text-base sm:text-lg shadow-lg hover:bg-foreground hover:text-background transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105"
-          onClick={() => {
-            setSeconds(MODES[mode].duration);
-            setIsRunning(false);
-          }}
-          disabled={seconds === MODES[mode].duration && !isRunning}
-        >
-          Reset
-        </button>
-      </div>
+  <div className="flex flex-col sm:flex-row gap-3 w-full justify-center z-10 animate-fade-in max-w-md mx-auto">
+    <button
+      className="min-w-[140px] px-5 py-2.5 rounded-xl bg-foreground text-background font-semibold text-sm sm:text-base shadow hover:bg-foreground/85 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-foreground/40 disabled:opacity-50 disabled:cursor-not-allowed"
+      onClick={() => setIsRunning((r) => !r)}
+    >
+      {isRunning ? "Pause" : seconds === 0 ? "Restart" : "Start"}
+    </button>
+    <button
+      className="min-w-[140px] px-5 py-2.5 rounded-xl bg-background border border-foreground/40 text-foreground font-semibold text-sm sm:text-base shadow hover:bg-foreground hover:text-background transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-foreground/40 disabled:opacity-40 disabled:cursor-not-allowed"
+      onClick={() => {
+        setSeconds(MODES[mode].duration);
+        setIsRunning(false);
+      }}
+      disabled={seconds === MODES[mode].duration && !isRunning}
+    >
+      Reset
+    </button>
+  </div>
 
   <footer className="mt-8 sm:mt-12 text-xs text-center opacity-80 w-full z-10 animate-fade-in">
         Made with Next.js, React & TailwindCSS
