@@ -267,7 +267,7 @@ export default function TaskManagerPage() {
 	};
 
 	return (
-		<div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center text-white overflow-hidden bg-[var(--background)] font-sans">
+		<div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center overflow-hidden bg-[var(--background)] font-sans">
 			{/* Background */}
 			<div className="absolute inset-0 pointer-events-none z-0">
 				<div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />
@@ -292,9 +292,9 @@ export default function TaskManagerPage() {
 							getting things done.
 						</p>
 						<div className="flex flex-wrap gap-3 items-center text-xs font-semibold">
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40">All: {tasks.length}</span>
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40">Done: {tasks.filter(t=>t.completed).length}</span>
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40">Progress: {completionPct}%</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">All: {tasks.length}</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">Done: {tasks.filter(t=>t.completed).length}</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">Progress: {completionPct}%</span>
 							<span className="px-3 py-1 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow">🔥 Streak: {streak}d</span>
 						</div>
 					</div>
@@ -327,17 +327,17 @@ export default function TaskManagerPage() {
 					aria-label="Add new task"
 				>
 					<div className="md:col-span-2 lg:col-span-2 flex flex-col gap-4">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white">
 							<span>Title</span>
 							<input
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder="Task title *"
-								className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
+								className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm text-white"
 								aria-label="Task title"
 							/>
 						</label>
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
 							<span>Notes <span className="opacity-60 normal-case">(optional)</span></span>
 							<textarea
 								value={notes}
@@ -350,7 +350,7 @@ export default function TaskManagerPage() {
 						</label>
 					</div>
 					<div className="flex flex-col gap-3">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
 							<span>Priority</span>
 							<select
 								value={priority}
@@ -362,7 +362,7 @@ export default function TaskManagerPage() {
 								<option value="high">High</option>
 							</select>
 						</label>
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
 							<span>Due Date</span>
 							<input
 								type="date"
@@ -373,7 +373,7 @@ export default function TaskManagerPage() {
 						</label>
 					</div>
 					<div className="flex flex-col gap-3">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide">
+						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white">
 							<span>Tags</span>
 							<input
 								value={tagInput}
@@ -415,7 +415,7 @@ export default function TaskManagerPage() {
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
 								placeholder="Search tasks..."
-								className="px-4 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+								className="px-4 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white"
 							/>
 						</div>
 						<div className="flex flex-col gap-1">
@@ -423,7 +423,7 @@ export default function TaskManagerPage() {
 							<select
 								value={filterStatus}
 								onChange={(e) => setFilterStatus(e.target.value as any)}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="all">All</option>
 								<option value="active">Active</option>
@@ -435,7 +435,7 @@ export default function TaskManagerPage() {
 							<select
 								value={filterPriority}
 								onChange={(e) => setFilterPriority(e.target.value as any)}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="all">All</option>
 								<option value="high">High</option>
@@ -448,7 +448,7 @@ export default function TaskManagerPage() {
 							<select
 								value={sort}
 								onChange={(e) => setSort(e.target.value as any)}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
 								<option value="newest">Newest</option>
 								<option value="due">Due Date</option>
@@ -516,7 +516,7 @@ export default function TaskManagerPage() {
 				</div>
 
 				{/* Task List */}
-				<section aria-label="Tasks" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+				<section aria-label="Tasks" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 text-white">
 					{filtered.map((task) => {
 						const gradient = PRIORITY_COLORS[task.priority];
 						return (
@@ -619,7 +619,7 @@ export default function TaskManagerPage() {
 						);
 					})}
 					{filtered.length === 0 && (
-						<div className="col-span-full p-10 text-center rounded-3xl bg-white/95 dark:bg-gray-900/40 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm opacity-80">
+						<div className="col-span-full p-10 text-center rounded-3xl bg-white/95 dark:bg-gray-900/40 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm opacity-80 text-white">
 							No tasks match. Try adjusting filters or add one above.
 						</div>
 					)}
