@@ -246,7 +246,7 @@ export default function ExpensesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6">
+  <div className="mx-auto max-w-6xl space-y-6 p-6 bg-[var(--background)] text-[var(--foreground)]">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
@@ -269,30 +269,30 @@ export default function ExpensesPage() {
         </div>
       </header>
 
-      <section className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm">
+  <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
         <ExpenseForm onAdd={addExpense} defaultDate={todayISO} />
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm">
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">Total Spent</div>
+        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+          <div className="text-sm text-[var(--foreground)]/60">Total Spent</div>
           <div className="text-2xl font-bold">{currency(totals)}</div>
         </div>
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm">
-          <div className="mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">By Category</div>
+        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+          <div className="mb-2 text-sm font-medium text-[var(--foreground)]">By Category</div>
           {byCategory.length ? <TinyBarChart data={byCategory.slice(0, 6)} /> : (
-            <div className="text-sm text-neutral-500 dark:text-neutral-400">No data yet</div>
+            <div className="text-sm text-[var(--foreground)]/60">No data yet</div>
           )}
         </div>
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm">
-          <div className="mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">By Month</div>
+        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
+          <div className="mb-2 text-sm font-medium text-[var(--foreground)]">By Month</div>
           {byMonth.length ? <TinyBarChart data={byMonth} /> : (
-            <div className="text-sm text-neutral-500 dark:text-neutral-400">No data yet</div>
+            <div className="text-sm text-[var(--foreground)]/60">No data yet</div>
           )}
         </div>
       </section>
 
-      <section className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm">
+  <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <Input
             placeholder="Search by description, category, or date yyyy-mm-dd"

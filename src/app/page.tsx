@@ -46,7 +46,7 @@ export default function PomodoroApp() {
   }, [isRunning]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#f7fafc] via-[#e3e6f3] to-[#cfd9e6] dark:from-[#18181b] dark:via-[#23232b] dark:to-[#1a1a1a] text-foreground font-sans p-4 sm:p-8 overflow-hidden">
+  <div className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--background)] text-[var(--foreground)] font-sans p-4 sm:p-8 overflow-hidden min-h-screen w-full h-full">
       {/* Animated background shapes and particles */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Main gradient blobs */}
@@ -84,7 +84,7 @@ export default function PomodoroApp() {
             : null;
         })()}
       </div>
-      <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center z-10">
+  <div className="w-full flex flex-col items-center justify-center z-10">
       {/* Animated background shapes */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />

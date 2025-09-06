@@ -38,8 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         {/* Top nav */}
-        <nav className="sticky top-0 z-50 border-b border-neutral-200 dark:border-neutral-800
-                        bg-white/70 dark:bg-black/40 backdrop-blur">
+  <nav className="sticky top-0 z-50 border-b border-[var(--foreground)]/10 bg-[var(--background)]/70 backdrop-blur">
           <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-6">
             <Link href="/" className="font-semibold hover:opacity-80">Pomodoro</Link>
             <Link href="/expenses" className="font-semibold hover:opacity-80">Expenses</Link>
@@ -50,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </nav>
 
         {/* Page content */}
-        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+  <main className="mx-auto max-w-6xl px-4 py-6 bg-[var(--background)] text-[var(--foreground)]">{children}</main>
       </body>
     </html>
   );
