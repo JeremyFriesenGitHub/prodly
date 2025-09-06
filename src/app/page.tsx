@@ -46,7 +46,18 @@ export default function PomodoroApp() {
   }, [isRunning]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#f7fafc] via-[#e3e6f3] to-[#cfd9e6] dark:from-[#18181b] dark:via-[#23232b] dark:to-[#1a1a1a] text-foreground font-sans p-4 sm:p-8 overflow-hidden">
+      <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#f7fafc] via-[#e3e6f3] to-[#cfd9e6] dark:from-[#18181b] dark:via-[#23232b] dark:to-[#1a1a1a] text-foreground font-sans p-4 sm:p-8 overflow-hidden">
+        {/* Productivity Apps Section */}
+        <section id="apps" style={{ width: "100%", marginTop: "2rem", zIndex: 20 }}>
+          <h2 className="text-2xl font-bold mb-2">Productivity Apps</h2>
+          <ul className="mb-4">
+            <li>Focus Timer (Pomodoro)</li>
+            <li>Task List (coming soon)</li>
+            <li>Habit Tracker (coming soon)</li>
+            {/* Add more app ideas here */}
+          </ul>
+          {/* You can implement each app as a separate component */}
+        </section>
       {/* Animated background shapes and particles */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Main gradient blobs */}
