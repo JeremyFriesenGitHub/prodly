@@ -40,16 +40,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Top nav */}
   <nav className="sticky top-0 z-50 border-b border-[var(--foreground)]/10 bg-[var(--background)]/70 backdrop-blur">
           <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-6">
-            <Link href="/" className="font-semibold hover:opacity-80">Pomodoro</Link>
+            <Link href="/" className="font-semibold hover:opacity-80">Home</Link>
+            <Link href="/pomodoro" className="font-semibold hover:opacity-80">Pomodoro</Link>
             <Link href="/expenses" className="font-semibold hover:opacity-80">Expenses</Link>
+            <Link href="/tasks" className="font-semibold hover:opacity-80">Task Manager</Link>
             <div className="ml-auto">
               <ThemeToggle />
             </div>
           </div>
         </nav>
 
-        {/* Page content */}
-  <main className="mx-auto max-w-6xl px-4 py-6 bg-[var(--background)] text-[var(--foreground)]">{children}</main>
+    {/* Page content - full width so landing backgrounds can stretch */}
+  <main className="w-full min-h-screen bg-[var(--background)] text-[var(--foreground)]">{children}</main>
       </body>
     </html>
   );
