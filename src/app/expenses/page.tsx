@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 // ---- Types ----
 export type Expense = {
@@ -33,7 +34,7 @@ function saveExpenses(items: Expense[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 function currency(n: number) {
-  return n.toLocaleString(undefined, { style: "currency", currency: "USD" });
+  return n.toLocaleString(undefined, { style: "currency", currency: "CAD" });
 }
 
 // ---- Tiny UI atoms (dark-aware) ----
@@ -184,14 +185,43 @@ function fromCSV(text: string): Expense[] {
 
 // ---- Main Page ----
 export default function ExpensesPage() {
+  // animated background + particles (shared theme)
+  const [mounted, setMounted] = useState(false);
+  const [particles, setParticles] = useState<{
+    key: number;
+    className: string;
+    style: React.CSSProperties;
+  }[]>([]);
+
   const [items, setItems] = useState<Expense[]>([]);
   const [query, setQuery] = useState("");
   const [aiTips, setAiTips] = useState<string[]>([]);
   const [asking, setAsking] = useState(false);
   const todayISO = new Date().toISOString().slice(0, 10);
 
-  useEffect(() => { setItems(loadExpenses()); }, []);
-  useEffect(() => { saveExpenses(items); }, [items]);
+  useEffect(() => {
+    setItems(loadExpenses());
+  }, []);
+  useEffect(() => {
+    saveExpenses(items);
+  }, [items]);
+
+  // spawn particles once mounted (client only)
+  useEffect(() => {
+    setMounted(true);
+    const arr = Array.from({ length: 12 }, (_, i) => ({
+      key: i,
+      className: `absolute rounded-full bg-white/10 blur-lg animate-particle${(i % 3) + 1}`,
+      style: {
+        width: `${16 + Math.random() * 24}px`,
+        height: `${16 + Math.random() * 24}px`,
+        top: `${Math.random() * 90}%`,
+        left: `${Math.random() * 90}%`,
+        opacity: 0.5 + Math.random() * 0.5,
+      },
+    }));
+    setParticles(arr);
+  }, []);
 
   function addExpense(e: Expense) {
     try {
@@ -276,108 +306,161 @@ export default function ExpensesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6 bg-[var(--background)] text-[var(--foreground)]">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Track spending alongside your Pomodoro focus.
-          </p>
+    <div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center text-[var(--foreground)] overflow-hidden bg-[var(--background)] font-sans">
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-[-120px] right-[-120px] w-[320px] h-[320px] bg-gradient-to-tr from-[#fca5a5] to-[#f87171] opacity-30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/4 w-[180px] h-[180px] bg-gradient-to-br from-[#fbbf24] via-[#f87171] to-[#f43f5e] opacity-20 rounded-full blur-2xl animate-fire" />
+        <div className="absolute bottom-1/3 right-1/4 w-[160px] h-[160px] bg-gradient-to-tr from-[#34d399] via-[#818cf8] to-[#fbbf24] opacity-20 rounded-full blur-2xl animate-fire2" />
+        {mounted && particles.map((p) => (
+          <div key={p.key} className={p.className} style={p.style} />
+        ))}
+      </div>
+
+      <main className="relative z-10 w-full max-w-7xl px-6 sm:px-10 py-10 sm:py-16 flex flex-col gap-10">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end gap-6 justify-between">
+          <div className="space-y-3">
+            <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight animate-gradient-text bg-gradient-to-r from-indigo-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-lg">
+              Expenses
+            </h1>
+            <p className="text-sm sm:text-base max-w-xl opacity-90">
+              Track spending alongside your productivity flows.
+            </p>
+          </div>
+          <div className="flex gap-3 items-center text-xs sm:text-sm">
+            <Link
+              href="/pomodoro"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+            >
+              Pomodoro
+            </Link>
+            <Link
+              href="/tasks"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+            >
+              Tasks
+            </Link>
+            <Link
+              href="/"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+            >
+              Home
+            </Link>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={askAiForExpenses} className="w-full sm:w-auto">
-            {asking ? "Thinking..." : "Ask AI"}
-          </Button>
-          <Button onClick={exportCSV} className="w-full sm:w-auto" variant="ghost">Export CSV</Button>
-          <label className="relative inline-flex items-center justify-center overflow-hidden rounded-xl
-                             bg-neutral-100 dark:bg-neutral-800 px-3 py-2 text-sm font-medium
-                             text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer">
-            Import CSV
-            <input
-              type="file" accept=".csv,text/csv"
-              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) importCSV(f); }}
+
+        {/* CSV + Actions (top right) */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div className="text-xs opacity-80">
+            Data stored locally in your browser. Export or import as CSV anytime.
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={exportCSV} className="w-full sm:w-auto" variant="ghost">Export CSV</Button>
+            <label className="relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-white/70 dark:bg-gray-900/60 px-3 py-2 text-sm font-medium text-indigo-700 dark:text-neutral-200 hover:bg-white/80 dark:hover:bg-gray-900/70 cursor-pointer shadow">
+              Import CSV
+              <input
+                type="file"
+                accept=".csv,text/csv"
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) importCSV(f); }}
+              />
+            </label>
+          </div>
+        </div>
+
+        {/* Form */}
+        <section className="p-6 sm:p-8 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+          <ExpenseForm onAdd={addExpense} defaultDate={todayISO} />
+        </section>
+
+        {/* Metrics */}
+        <section className="grid gap-6 sm:grid-cols-3">
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+            <div className="text-sm opacity-80 text-white">Total Spent</div>
+            <div className="text-3xl font-extrabold mt-1 tabular-nums text-white">{currency(totals)}</div>
+          </div>
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80 text-white">By Category</div>
+            {byCategory.length ? (
+              <TinyBarChart data={byCategory.slice(0, 6)} />
+            ) : (
+              <div className="text-sm opacity-60 text-white">No data yet</div>
+            )}
+          </div>
+            <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80 text-white">By Month</div>
+            {byMonth.length ? (
+              <TinyBarChart data={byMonth} />
+            ) : (
+              <div className="text-sm opacity-60 text-white">No data yet</div>
+            )}
+          </div>
+        </section>
+
+        {/* Table */}
+        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Input
+              placeholder="Search by description, category, or date yyyy-mm-dd"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="sm:max-w-md"
             />
-          </label>
-        </div>
-      </header>
-
-      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-        <ExpenseForm onAdd={addExpense} defaultDate={todayISO} />
-      </section>
-
-      <section className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-          <div className="text-sm text-[var(--foreground)]/60">Total Spent</div>
-          <div className="text-2xl font-bold">{currency(totals)}</div>
-        </div>
-        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-          <div className="mb-2 text-sm font-medium text-[var(--foreground)]">By Category</div>
-          {byCategory.length ? <TinyBarChart data={byCategory.slice(0, 6)} /> : (
-            <div className="text-sm text-[var(--foreground)]/60">No data yet</div>
-          )}
-        </div>
-        <div className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-          <div className="mb-2 text-sm font-medium text-[var(--foreground)]">By Month</div>
-          {byMonth.length ? <TinyBarChart data={byMonth} /> : (
-            <div className="text-sm text-[var(--foreground)]/60">No data yet</div>
-          )}
-        </div>
-      </section>
-
-      {/* AI suggestions */}
-      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-sm font-medium">AI Suggestions</div>
-          <Button variant="ghost" onClick={askAiForExpenses} disabled={asking}>
-            {asking ? "Thinking..." : "Refresh"}
-          </Button>
-        </div>
-        {aiTips.length ? (
-          <ul className="list-disc pl-5 space-y-1 text-sm">
-            {aiTips.map((s, i) => <li key={i}>{s}</li>)}
-          </ul>
-        ) : (
-          <div className="text-sm text-[var(--foreground)]/60">No suggestions yet — click “Ask AI”.</div>
-        )}
-      </section>
-
-      <section className="rounded-2xl border border-[var(--foreground)]/10 bg-[var(--background)] p-4 shadow-sm">
-        <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <Input
-            placeholder="Search by description, category, or date yyyy-mm-dd"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="sm:max-w-md"
-          />
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">{filtered.length} item(s)</div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="text-left text-neutral-600 dark:text-neutral-300">
-                <th className="px-2 py-2">Date</th>
-                <th className="px-2 py-2">Category</th>
-                <th className="px-2 py-2">Description</th>
-                <th className="px-2 py-2 text-right">Amount</th>
-                <th className="px-2 py-2 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((e) => (
-                <ExpenseRow key={e.id} e={e} onUpdate={updateExpense} onDelete={deleteExpense} />
-              ))}
-              {!filtered.length && (
-                <tr>
-                  <td colSpan={5} className="px-2 py-6 text-center text-neutral-500 dark:text-neutral-400">
-                    No expenses yet. Add your first one above!
-                  </td>
+            <div className="text-sm opacity-70 text-white">{filtered.length} item(s)</div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr className="text-left opacity-80">
+                  <th className="px-2 py-2 text-white">Date</th>
+                  <th className="px-2 py-2 text-white">Category</th>
+                  <th className="px-2 py-2 text-white">Description</th>
+                  <th className="px-2 py-2 text-right text-white">Amount</th>
+                  <th className="px-2 py-2 text-right text-white">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody>
+                {filtered.map((e) => (
+                  <ExpenseRow key={e.id} e={e} onUpdate={updateExpense} onDelete={deleteExpense} />
+                ))}
+                {!filtered.length && (
+                  <tr>
+                    <td colSpan={5} className="px-2 py-6 text-center opacity-60 text-white">
+                      No expenses yet. Add your first one above!
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer className="text-xs text-center opacity-70 pt-4">
+          Made with Next.js, React & TailwindCSS • Expenses stored locally
+        </footer>
+      </main>
+
+      {/* Animations */}
+      <style jsx>{`
+        .animate-gradient-text { background-size: 200% 200%; animation: gradient-text 2.5s ease-in-out infinite alternate; }
+        @keyframes gradient-text { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes fire { 0% { transform: scale(1) translateY(0); opacity: 0.7; } 50% { transform: scale(1.1) translateY(-10px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 0.7; } }
+        .animate-fire { animation: fire 2.2s ease-in-out infinite; }
+        @keyframes fire2 { 0% { transform: scale(1) translateY(0); opacity: 0.7; } 50% { transform: scale(1.15) translateY(10px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 0.7; } }
+        .animate-fire2 { animation: fire2 2.7s ease-in-out infinite; }
+        @keyframes particle1 { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; } 100% { transform: translateY(0) scale(1); opacity: 0.5; } }
+        .animate-particle1 { animation: particle1 3.2s ease-in-out infinite; }
+        @keyframes particle2 { 0% { transform: translateY(0) scale(1); opacity: 0.5; } 50% { transform: translateY(20px) scale(0.8); opacity: 0.7; } 100% { transform: translateY(0) scale(1); opacity: 0.5; } }
+        .animate-particle2 { animation: particle2 2.7s ease-in-out infinite; }
+        @keyframes particle3 { 0% { transform: translateX(0) scale(1); opacity: 0.5; } 50% { transform: translateX(20px) scale(1.1); opacity: 0.7; } 100% { transform: translateX(0) scale(1); opacity: 0.5; } }
+        .animate-particle3 { animation: particle3 3.7s ease-in-out infinite; }
+        /* Date input styling (white icon/text like tasks page) */
+        .date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.8); opacity: 0.9; }
+        .date-input { color: #fff; caret-color: #fff; }
+        :global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: none; }
+      `}</style>
     </div>
   );
 }
