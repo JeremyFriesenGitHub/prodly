@@ -7,8 +7,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Pomodoro + Expenses",
-  description: "Pomodoro timer with expense tracking",
+  title: "Prodly",
+  description: "Prodly – unified local-first productivity stack (Pomodoro, tasks, expenses)",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
