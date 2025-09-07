@@ -33,6 +33,7 @@ function Particles() {
     setParticles(arr);
   }, []);
   return particles.map(p => <div key={p.key} className={p.className} style={p.style} />);
+
 }
 
 export default function PomodoroApp() {
