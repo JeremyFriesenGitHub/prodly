@@ -4,8 +4,7 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DEFAULT_MAX_SUGGESTIONS =
-  Number(process.env.EXPENSE_MAX_SUGGESTIONS || 5);
+// (Removed unused top-level DEFAULT_MAX_SUGGESTIONS; a scoped one exists where needed)
 
 
 type Expense = {
@@ -32,9 +31,16 @@ const SAM_AGENT = process.env.SAM_AGENT_NAME || "OrchestratorAgent";
 const SAM_NAMESPACE = process.env.SAM_NAMESPACE || "default_namespace";
 
 // ---------- helpers ----------
-function uuid() {
-  // @ts-ignore
-  return (globalThis.crypto?.randomUUID?.() as string) || Math.random().toString(36).slice(2);
+function uuid(): string {
+  try {
+    if (typeof globalThis !== "undefined") {
+      const g = globalThis as { crypto?: { randomUUID?: () => string } };
+      if (typeof g.crypto?.randomUUID === "function") {
+        return g.crypto.randomUUID();
+      }
+    }
+  } catch { /* noop */ }
+  return Math.random().toString(36).slice(2);
 }
 
 function choose<T>(arr: T[], rng = Math.random): T {
@@ -60,15 +66,7 @@ function minsToHHMM(total: number) {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-function pctDelta(curr: number, prev: number) {
-  if (!prev) return 0;
-  return (curr - prev) / prev;
-}
-
-function mean(nums: number[]) {
-  if (!nums.length) return 0;
-  return nums.reduce((a, b) => a + b, 0) / nums.length;
-}
+// (Removed unused pctDelta & mean helpers)
 
 // optional deterministic RNG if caller sends a seed
 function seeded(seed: number) {
@@ -83,7 +81,10 @@ function seeded(seed: number) {
 }
 
 // ---------- SAM forwarder ----------
-async function sendToSam(type: string, payload: any) {
+type SamPayload = unknown; // widen later when backend contract stabilizes
+type SamJSON = Record<string, unknown>;
+
+async function sendToSam(type: string, payload: SamPayload): Promise<SamJSON | { raw: string }> {
   const endpoint = new URL("/api/v1/message:send", SAM_URL).toString(); // keep ':' intact
 
   const body = {
@@ -117,8 +118,12 @@ async function sendToSam(type: string, payload: any) {
   });
 
   const text = await r.text();
-  let data: any;
-  try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  let data: SamJSON | { raw: string };
+  try {
+    data = JSON.parse(text) as SamJSON;
+  } catch {
+    data = { raw: text };
+  }
 
   if (!r.ok) {
     throw new Error(`SAM ${r.status}: ${text || r.statusText}`);
@@ -126,166 +131,7 @@ async function sendToSam(type: string, payload: any) {
   return data;
 }
 
-// ---------- EXPANDED ADVICE LIBRARIES ----------
-const OPENERS = [
-  "Alright, quick pulse-check on your spending:",
-  "Here’s the read I’m getting from your latest expenses:",
-  "Scanning the numbers… here’s what jumps out:",
-  "I ran a fast pass on your ledger — signals below:",
-  "Telemetry looks decent; a few hotspots worth attention:",
-  "I pulled a mini-report; highlights incoming:",
-  "Your money map has a couple strong currents; let’s reroute:",
-  "Heads up — a few small levers can move a lot here:",
-  "Zooming out: story so far, plus next best moves:",
-  "Fresh scrape complete. Narrative + nudges:",
-  "Signal detected. Here’s where it’s loudest:",
-  "My summary is spicy but kind. Let’s tune the curve:",
-];
-
-const MOVES = [
-  "Set soft weekly caps on the top categories; small constraints compound nicely.",
-  "Batch purchases in the biggest category into a single weekly window — it reduces impulse drift.",
-  "If a purchase is ‘want’ not ‘need’, add a 24-hour cooling period. It quietly saves a ton.",
-  "Use envelope-style budgets for the top two categories; when the envelope is empty, you’re done.",
-  "Swap one recurring item this month for a lower-cost analogue — just one, but make it stick.",
-  "Pre-decide your default: groceries list, simple lunches, routine transport — novelty is expensive.",
-  "Do a 7-day no-spend challenge on the highest category; reset the baseline.",
-  "Timebox browsing to 15 minutes with a timer; choice overload inflates spend.",
-  "Create a ‘friction folder’: move shopping apps off the home screen, disable one-tap checkout.",
-  "Run a weekly ‘money minute’: categorize 5–10 items; momentum > perfection.",
-  "Set alerts when a category crosses 40% of monthly plan; early warning beats end-of-month panic.",
-  "Move discretionary spend to a separate card with a fixed weekly top-up.",
-  "Unbundle ‘Other’ into named buckets; ambiguity is a budget leak.",
-  "Adopt WIP limits for subscriptions: one in, one out.",
-  "Price anchor with a target CPM (cost per meal, per ride, per outing) and stick to it.",
-  "Use a ‘buy later’ list; if it still matters in 30 days, revisit.",
-  "Schedule ‘errands block’ once per week; reduce micro-purchases.",
-  "Do a rolling 3-month lookback for the top category; set this month’s cap at 85–90% of that mean.",
-  "Add a ‘spend reason’ to the memo field; future-you will thank you.",
-  "Make returns painless: keep packaging and a dedicated ‘return bin’.",
-  "Set a maximum delivery fee per order; below that or no checkout.",
-  "Use cash for the priciest category for 2 weeks; tactile restraint helps.",
-];
-
-const SAVINGS_AUTOMATIONS = [
-  "Round up all card transactions and funnel round-ups to savings.",
-  "Skim 1–2% off paycheck inflow straight to a high-yield bucket.",
-  "Automate a micro-transfer every time you log an ‘Other’ expense — the ‘anti-misc’ rule.",
-  "Auto-move the first $25 of each week into savings; it disappears before you notice.",
-  "Every Friday, sweep checking balance above a threshold into savings.",
-  "Create a sinking fund for annual bills; contribute monthly to avoid spikes.",
-  "Auto-pay the smallest debt first, then snowball the payment to the next.",
-  "Set a pay-yourself-first transfer on payday (even $10 counts).",
-  "Trigger a $5 transfer when you skip a delivery order — reward the good behavior.",
-  "Split deposits: 90% checking, 10% savings — invisible and steady.",
-  "Create category-based autosave: when Groceries < plan, sweep the difference.",
-  "Auto-increase savings by $5/month — ladder it slowly.",
-  "Send cashback rewards straight to savings rather than statement credit.",
-  "Automate bill reminders 5 days before due date to avoid fees.",
-  "Put refunds and windfalls 70% savings / 30% fun; pre-decide the split.",
-];
-
-const MINDSET = [
-  "Set a ‘boring default’ for lunches; novelty costs more than it feels.",
-  "Rename your savings account to the goal it funds — brains love labels.",
-  "Track streaks, not perfection. Two in a row beats one big reset.",
-  "Make the budget visible: a widget, a whiteboard, a sticky note — ambient awareness wins.",
-  "Decide your ‘never’ list (e.g., delivery fees over $6, rides under 2km).",
-  "Treat subscriptions as rentals, not identity. Churn is healthy.",
-  "Practice ‘goal substitution’: when tempted, open the savings app instead.",
-  "Budget is permission, not punishment: spend boldly on the things you love, cut mercilessly elsewhere.",
-  "Design your environment to win: remove friction from good choices, add friction to bad ones.",
-  "Think in terms of systems (habits + automations), not willpower.",
-  "Future-you is on the team; leave them notes.",
-  "If it takes < 2 minutes (cancel, return, categorize), do it now.",
-  "One improvement per week beats ten intentions.",
-  "Choose constraints that feel kind; you’ll keep them.",
-  "Curate inputs: unfollow the buy-now firehose.",
-];
-
-const FRAMEWORKS = [
-  "Try the 50/30/20 split as a baseline: needs / wants / save-invest.",
-  "Use the 60/20/20 rule if housing is heavy: fixed / goals / flex.",
-  "Apply ‘one-in-one-out’ for subscriptions and wardrobe.",
-  "Set two ‘no-spend’ days per week (pick repeatable weekdays).",
-  "Adopt the ‘rule of 3’: three big rocks per week, money aligned.",
-  "Weekly review: 10 minutes to tag, cap, and choose one tweak.",
-  "CPM mindset: track cost per meal, ride, and outing; optimize the outliers.",
-  "Sinking funds: holidays, travel, gifts — remove surprise from the budget.",
-  "12-month envelope for annuals (insurance, domains, memberships).",
-  "Payday partition: pay-yourself-first, then the rest.",
-  "Debt snowball vs avalanche: pick one and automate the cadence.",
-];
-
-const NEGOTIATION_SCRIPTS = [
-  "Call your ISP: “I noticed new customer promos at $X. Can you match that or move me to a loyalty plan?”",
-  "Card issuer: “Can you review my APR based on on-time history? What retention offers exist today?”",
-  "Gym: “I’m reviewing expenses. What’s the pause or reduced-rate option for 2 months?”",
-  "Phone plan: “I see a $Y deal advertised. Can you help me migrate without fees?”",
-  "Insurance: “I’m shopping quotes; can we revisit coverage/discounts to reach $Z monthly?”",
-];
-
-const CATEGORY_SPECIFIC: Record<string, string[]> = {
-  Groceries: [
-    "Shop your pantry first and build meals around existing stock.",
-    "Switch 2 branded items to store brand this week.",
-    "Lock a rotating 10-meal plan; novelty is for weekends.",
-    "Use a shared list; mid-week top-ups inflate spend.",
-    "Cap snacks to a fixed weekly envelope.",
-  ],
-  Dining: [
-    "Pick a house special (your default cheap eat) and stick with it on weekdays.",
-    "Rotate ‘cook-once, eat-twice’ recipes to kill midweek takeout.",
-    "Budget ‘fun meals’ and label them — intentional indulgence.",
-  ],
-  Transport: [
-    "Bundle errands to a single commute loop.",
-    "Aim for off-peak rides; surge multiplies silently.",
-    "Monthly transit pass breakeven? Check last 60 days.",
-  ],
-  Housing: [
-    "Ask about utility equalized billing to smooth the spikes.",
-    "Consider a thermostat schedule — 1–2° shift saves real money.",
-    "Renters: calendar your renewal 90 days early; negotiate calmly.",
-  ],
-  Shopping: [
-    "Create a ‘wishlist cooling shelf’. Re-check in 30 days.",
-    "Set a per-item max threshold for impulse buys.",
-    "Buy quality once for recurring pain points; it’s cheaper long-term.",
-  ],
-  Subscriptions: [
-    "Audit: sort by last used; pause the bottom half for 30 days.",
-    "Rotate streaming each month; you won’t miss a beat.",
-    "Enable reminders 3 days before renewal.",
-  ],
-  Travel: [
-    "Pick flexible dates and track fares; alerts beat last-minute buys.",
-    "Anchor daily budget per person and stick to cash envelopes.",
-  ],
-  Health: [
-    "Generic equivalents: ask the pharmacist.",
-    "Plan preventive care to avoid expensive urgent visits.",
-  ],
-  Other: [
-    "Rename ‘Other’ into specific buckets; precision changes behavior.",
-  ],
-};
-
-const EXPERIMENTS_7D = [
-  "7-day receipt snap + categorize nightly; see what pops.",
-  "7-day no-delivery challenge; redirect savings to a mini-goal.",
-  "7-day cash-only on the top category.",
-  "7-day price diary: log unit price for staples; buy the best CP.",
-  "7-day ‘buy later’ list; at week’s end, pick 0–1 items.",
-  "7-day ‘home coffee’ streak; tip yourself $2 each day you stick it.",
-];
-
-const TOOLS_APPS = [
-  "Calendar a 10-minute weekly money review (repeat event).",
-  "Turn on category alerts in your budgeting app.",
-  "Use shared notes for lists; eliminate mid-week drift.",
-  "Snapshot the cart before checkout — next day review as default.",
-];
+// (Removed large unused advice constant arrays to satisfy lint; reintroduce when integrated.)
 
 // ---------- route ----------
 export async function POST(req: Request) {
@@ -559,7 +405,7 @@ export async function POST(req: Request) {
       const due = t.due ?? "";
       const overdue = !!(due && due < today && !t.completed);
       const dueToday = due === today && !t.completed;
-      const jitter = (rng as any)() * 5; // tie-break wiggle
+  const jitter = rng() * 5; // tie-break wiggle
       return (
         (overdue ? 1000 : 0) +
         (dueToday ? 500 : 0) +
@@ -575,7 +421,7 @@ export async function POST(req: Request) {
 
     const plan = sorted.slice(0, 10).map((t) => {
       const base = t.priority === "high" ? 50 : t.priority === "medium" ? 30 : 20;
-      const est = base + (maybe(0.35, rng as any) ? 5 : 0);
+  const est = base + (maybe(0.35, rng) ? 5 : 0);
       const block = {
         id: t.id,
         title: t.title,
@@ -610,7 +456,7 @@ export async function POST(req: Request) {
       "Kill zombie tasks: if it’s been ignored 3 times, rewrite or archive.",
       "Make the next step testably small.",
     ];
-    const nudges = shuffle(NUDGES_POOL, rng as any).slice(0, 4);
+  const nudges = shuffle(NUDGES_POOL, rng).slice(0, 4);
 
     const tone = choose(
       [
@@ -619,7 +465,7 @@ export async function POST(req: Request) {
         "One clear win, then let the rest follow.",
         "Aim for momentum, not max effort.",
       ],
-      rng as any
+      rng
     );
 
     // Optional: group by tag buckets
