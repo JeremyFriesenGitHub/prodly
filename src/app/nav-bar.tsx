@@ -24,12 +24,10 @@ export default function NavBar() {
           </span>
         </button>
         <Link href="/" className="font-semibold hover:opacity-80">Home</Link>
-        <div className="hidden md:flex items-center gap-6 text-sm">
+        <div className="hidden md:flex items-center gap-6 text-sm ml-auto">
           <Link href="/pomodoro" className="font-medium hover:opacity-80">Pomodoro</Link>
           <Link href="/expenses" className="font-medium hover:opacity-80">Expenses</Link>
           <Link href="/tasks" className="font-medium hover:opacity-80">Tasks</Link>
-        </div>
-        <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
         </div>
       </div>
