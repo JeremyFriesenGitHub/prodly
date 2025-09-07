@@ -33,13 +33,17 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="ml-auto inline-flex items-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 px-3 py-1.5 text-sm
-                 bg-white/70 dark:bg-black/40 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
-      aria-label="Toggle theme"
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md transition focus:outline-none focus:ring-2 focus:ring-indigo-500/40 hover:scale-105 active:scale-95"
     >
-      <span className="inline-block h-4 w-4 rounded-full border border-current"
-            style={{ background: theme === "dark" ? "#0a0a0a" : "#fff" }} />
-      {theme === "dark" ? "Dark" : "Light"}
+      {/* Sun / Moon icon (pure CSS) */}
+      <span className="relative block h-5 w-5">
+        {/* Sun base */}
+        <span className={`absolute inset-0 rounded-full transition-all duration-300 ${theme === "dark" ? "scale-0 opacity-0" : "scale-100 opacity-100"} bg-yellow-400 shadow-[0_0_4px_1px_rgba(250,204,21,0.6)]`} />
+        {/* Moon (circle with cut-out) */}
+        <span className={`absolute inset-0 rounded-full transition-all duration-300 ${theme === "dark" ? "bg-neutral-200 scale-100 opacity-100" : "scale-0 opacity-0"}`}></span>
+        <span className={`absolute top-0 left-1/3 h-5 w-5 rounded-full bg-neutral-900 transition-all duration-300 ${theme === "dark" ? "opacity-100" : "opacity-0"}`} style={{ transform: theme === "dark" ? "translateX(4px)" : "translateX(-6px)" }} />
+      </span>
     </button>
   );
 }

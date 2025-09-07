@@ -17,14 +17,8 @@ function formatTime(seconds: number) {
 }
 
 function Particles() {
-  const [mounted, setMounted] = useState(false);
-  const [particles, setParticles] = useState<{
-    key: number;
-    className: string;
-    style: React.CSSProperties;
-  }[]>([]);
+  const [particles, setParticles] = useState<{ key:number; className:string; style:React.CSSProperties }[]>([]);
   useEffect(() => {
-    setMounted(true);
     const arr = Array.from({ length: 12 }, (_, i) => ({
       key: i,
       className: `absolute rounded-full bg-white/10 blur-lg animate-particle${i % 3 + 1}`,
@@ -38,8 +32,8 @@ function Particles() {
     }));
     setParticles(arr);
   }, []);
-  if (!mounted) return null;
-  return particles.map((p) => <div key={p.key} className={p.className} style={p.style} />);
+  return particles.map(p => <div key={p.key} className={p.className} style={p.style} />);
+
 }
 
 export default function PomodoroApp() {
@@ -81,7 +75,6 @@ export default function PomodoroApp() {
         {/* Extra animated fire-like gradients */}
         <div className="absolute top-1/2 left-1/4 w-[180px] h-[180px] bg-gradient-to-br from-[#fbbf24] via-[#f87171] to-[#f43f5e] opacity-20 rounded-full blur-2xl animate-fire" />
         <div className="absolute bottom-1/3 right-1/4 w-[160px] h-[160px] bg-gradient-to-tr from-[#34d399] via-[#818cf8] to-[#fbbf24] opacity-20 rounded-full blur-2xl animate-fire2" />
-  {/* Animated floating particles */}
   <Particles />
       </div>
   <div className="w-full flex flex-col items-center justify-center z-10">

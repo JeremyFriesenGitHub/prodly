@@ -316,32 +316,34 @@ export default function TaskManagerPage() {
 							<span className="px-3 py-1 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow">🔥 Streak: {streak}d</span>
 						</div>
 					</div>
-					<div className="flex gap-3 items-center text-xs sm:text-sm">
-            <button
+					<div className="flex flex-col gap-2 sm:items-end w-full sm:w-auto">
+						<div className="flex items-center gap-2 text-xs sm:text-sm overflow-x-auto no-scrollbar -mx-2 px-2 sm:mx-0 sm:px-0">
+						<button
               onClick={planMyDay}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+							className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
               disabled={planning}
             >
               {planning ? "Planning..." : "Plan my day"}
             </button>
 						<Link
 							href="/pomodoro"
-							className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+							className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
 						>
 							Pomodoro
 						</Link>
 						<Link
 							href="/expenses"
-							className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+							className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
 						>
 							Expenses
 						</Link>
 						<Link
 							href="/"
-							className="px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
+							className="shrink-0 px-3 py-2 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold shadow hover:brightness-110 hover:scale-[1.04] active:scale-95 transition"
 						>
 							Home
 						</Link>
+						</div>
 					</div>
 				</div>
 
@@ -448,7 +450,7 @@ export default function TaskManagerPage() {
 							<select
 								value={filterStatus}
 								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-									const v = e.target.value as "all" | "active" | "completed";
+									const v = e.target.value as 'all' | 'active' | 'completed';
 									setFilterStatus(v);
 								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
@@ -463,8 +465,7 @@ export default function TaskManagerPage() {
 							<select
 								value={filterPriority}
 								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-									const v = e.target.value as Priority | "all";
-									setFilterPriority(v);
+									const v = e.target.value as 'all' | Priority; setFilterPriority(v);
 								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
@@ -479,8 +480,7 @@ export default function TaskManagerPage() {
 							<select
 								value={sort}
 								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-									const v = e.target.value as "newest" | "due" | "priority";
-									setSort(v);
+									const v = e.target.value as 'newest' | 'due' | 'priority'; setSort(v);
 								}}
 								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
 							>
@@ -715,6 +715,9 @@ export default function TaskManagerPage() {
 				.date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.8); opacity: 0.9; }
 				.date-input { color: #fff; caret-color: #fff; }
 				:global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: none; }
+				/* hide scrollbar for horizontal nav scroller */
+				.no-scrollbar::-webkit-scrollbar { display: none; }
+				.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 			`}</style>
 			{/* Hidden SVG defs for gradient stroke */}
 			<svg width="0" height="0" className="absolute">
