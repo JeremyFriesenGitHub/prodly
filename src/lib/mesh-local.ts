@@ -4,7 +4,16 @@ export type Expense = { id: string; date: string; category: string; description:
 export type Task = { id: string; title: string; notes: string; priority: "low"|"medium"|"high"; due?: string; tags: string[]; completed: boolean; createdAt: number; completedAt?: number };
 
 // Expense advice ---------------------------------
-export function adviseExpenses(items: Expense[], opts?: { currency?: string; maxSuggestions?: number; seed?: number }) {
+export interface ExpenseAdviceEnvelope { category: string; weeklyCap: number; targetCutPct: number; currency: string }
+export interface ExpenseAdviceStats { total: number; topCategories: { category: string; amount: number }[]; months: { month: string; total: number }[] }
+export interface ExpenseAdviceResult {
+  suggestions: string[];
+  envelopes: ExpenseAdviceEnvelope[];
+  stats: ExpenseAdviceStats;
+  narrative: string;
+}
+
+export function adviseExpenses(items: Expense[], opts?: { currency?: string; maxSuggestions?: number; seed?: number }): ExpenseAdviceResult {
   const currency = opts?.currency || "CAD";
   const DEFAULT_MAX_SUGGESTIONS = 6;
   const maxSuggestions = Math.max(3, Math.min(10, Number(opts?.maxSuggestions ?? DEFAULT_MAX_SUGGESTIONS)));
@@ -114,7 +123,9 @@ export function adviseExpenses(items: Expense[], opts?: { currency?: string; max
 }
 
 // Task planning ----------------------------------
-export function planTasks(tasks: Task[], opts?: { seed?: number }) {
+export interface PlannedBlock { id: string; title: string; from: string; to: string; estimateMin: number; blocked?: boolean }
+export interface PlanTasksResult { plan: PlannedBlock[]; nudges: string[]; tone: string; planText: string; buckets: Record<string,string[]>; blocked: string[] }
+export function planTasks(tasks: Task[], opts?: { seed?: number }): PlanTasksResult {
   // local helpers (duplicated lightweightly to avoid importing server module)
   const seeded = (seed: number) => { let x = seed || 123456789; return function(){ x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return ((x>>>0)%1_000_000)/1_000_000; }; };
   const minsToHHMM = (total:number) => { const h = Math.floor(total/60)%24; const m = total%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; };

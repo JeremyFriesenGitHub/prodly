@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { planTasks } from "@/lib/mesh-local";
+import { planTasks, PlanTasksResult } from "@/lib/mesh-local";
 import Link from "next/link";
 
 type Priority = "low" | "medium" | "high";
@@ -245,14 +245,14 @@ export default function TaskManagerPage() {
 	async function planMyDay() {
 		try {
 			setPlanning(true);
-			let data: any;
+			let data: PlanTasksResult | undefined;
 			try {
 				const res = await fetch("/api/mesh", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ type: "tasks.plan", payload: { tasks } }),
 				});
-				if (res.ok) data = await res.json();
+				if (res.ok) data = (await res.json()) as PlanTasksResult;
 			} catch {}
 			if (!data) data = planTasks(tasks);
 			setPlan(data?.plan ?? []);
