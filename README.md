@@ -32,7 +32,7 @@ src/lib/mesh-local.ts# Client fallback logic (planning + expense advising)
 
 ```bash
 git clone <this-repo>
-cd hack
+cd prodly
 npm install
 npm run dev
 ```
