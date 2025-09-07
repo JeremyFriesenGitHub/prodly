@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { adviseExpenses } from "@/lib/mesh-local";
 
 // ---- Types ----
 export type Expense = {
@@ -241,12 +242,18 @@ export default function ExpensesPage() {
   async function askAiForExpenses() {
     try {
       setAsking(true);
-      const res = await fetch("/api/mesh", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "expense.advise", payload: { items } }),
-      });
-      const data = await res.json();
+      let data: any;
+      try {
+        const res = await fetch("/api/mesh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "expense.advise", payload: { items } }),
+        });
+        if (res.ok) data = await res.json();
+      } catch {}
+      if (!data) {
+        data = adviseExpenses(items);
+      }
       setAiTips(data?.suggestions ?? []);
     } finally {
       setAsking(false);

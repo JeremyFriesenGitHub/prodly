@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { planTasks } from "@/lib/mesh-local";
 import Link from "next/link";
 
 type Priority = "low" | "medium" | "high";
@@ -241,21 +242,25 @@ export default function TaskManagerPage() {
     return list;
   }, [tasks, filterStatus, filterPriority, search, sort]);
 
-  async function planMyDay() {
-    try {
-      setPlanning(true);
-      const res = await fetch("/api/mesh", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "tasks.plan", payload: { tasks } }),
-      });
-      const data = await res.json();
-      setPlan(data?.plan ?? []);
-      setNudges(data?.nudges ?? []);
-    } finally {
-      setPlanning(false);
-    }
-  }
+	async function planMyDay() {
+		try {
+			setPlanning(true);
+			let data: any;
+			try {
+				const res = await fetch("/api/mesh", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ type: "tasks.plan", payload: { tasks } }),
+				});
+				if (res.ok) data = await res.json();
+			} catch {}
+			if (!data) data = planTasks(tasks);
+			setPlan(data?.plan ?? []);
+			setNudges(data?.nudges ?? []);
+		} finally {
+			setPlanning(false);
+		}
+	}
 
   const priorityBadge = (p: Priority) => {
     const label = p === "low" ? "Low" : p === "medium" ? "Medium" : "High";
