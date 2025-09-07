@@ -1,8 +1,6 @@
 // app/api/mesh/route.ts
 import { NextResponse } from "next/server";
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+// Removed runtime/dynamic exports to support static export (GitHub Pages). This route will be inert there.
 
 // (Removed unused top-level DEFAULT_MAX_SUGGESTIONS; a scoped one exists where needed)
 
