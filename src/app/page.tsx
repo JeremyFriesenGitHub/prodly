@@ -92,23 +92,23 @@ export default function LandingPage() {
         <section aria-label="Core Features" className="w-full">
           <h2 className="text-center text-2xl sm:text-3xl font-bold mb-10">Everything you need to stay in motion</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <Link href="/pomodoro" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white">
+            <Link href="/pomodoro" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 text-neutral-900 dark:text-white">
               <span className="text-4xl mb-2 group-hover:scale-110 transition">🍅</span>
-              <h3 className="font-semibold text-xl text-white">Stay Focused</h3>
-              <p className="text-sm mt-2 text-white/80 text-center">Structured intervals to beat distractions & build deep work momentum.</p>
-              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-white/15 text-white px-3 py-1 rounded-full">Open Timer →</span>
+              <h3 className="font-semibold text-xl">Stay Focused</h3>
+              <p className="text-sm mt-2 opacity-80 text-center">Structured intervals to beat distractions & build deep work momentum.</p>
+              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-black/10 dark:bg-white/15 px-3 py-1 rounded-full">Open Timer →</span>
             </Link>
-            <Link href="/expenses" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-pink-400 text-white">
+            <Link href="/expenses" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-pink-400 text-neutral-900 dark:text-white">
               <span className="text-4xl mb-2 group-hover:scale-110 transition">💸</span>
-              <h3 className="font-semibold text-xl text-white">Track Spending</h3>
-              <p className="text-sm mt-2 text-white/80 text-center">Log expenses effortlessly & recognize habit patterns over time.</p>
-              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-white/15 text-white px-3 py-1 rounded-full">Open Expenses →</span>
+              <h3 className="font-semibold text-xl">Track Spending</h3>
+              <p className="text-sm mt-2 opacity-80 text-center">Log expenses effortlessly & recognize habit patterns over time.</p>
+              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-black/10 dark:bg-white/15 px-3 py-1 rounded-full">Open Expenses →</span>
             </Link>
-            <Link href="/tasks" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-amber-400 text-white">
+            <Link href="/tasks" className="group p-8 flex flex-col items-center rounded-3xl bg-white/60 dark:bg-gray-900/50 shadow-xl border border-white/30 dark:border-gray-800/40 glass-card backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-amber-400 text-neutral-900 dark:text-white">
               <span className="text-4xl mb-2 group-hover:scale-110 transition">🎉</span>
-              <h3 className="font-semibold text-xl text-white">Celebrate Progress</h3>
-              <p className="text-sm mt-2 text-white/80 text-center">See streaks & wins to stay motivated every single day.</p>
-              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-white/15 text-white px-3 py-1 rounded-full">Open Tasks →</span>
+              <h3 className="font-semibold text-xl">Celebrate Progress</h3>
+              <p className="text-sm mt-2 opacity-80 text-center">See streaks & wins to stay motivated every single day.</p>
+              <span className="mt-4 text-xs font-semibold uppercase tracking-wide bg-black/10 dark:bg-white/15 px-3 py-1 rounded-full">Open Tasks →</span>
             </Link>
           </div>
         </section>
@@ -123,10 +123,10 @@ export default function LandingPage() {
               { icon: "3", title: "Reflect", body: "View streaks, spending breakdowns & momentum signals." },
               { icon: "4", title: "Adapt", body: "Ask AI for nudges and a smart day plan anytime." },
             ].map(step => (
-              <li key={step.title} className="flex flex-col gap-3 p-6 rounded-2xl bg-white/60 dark:bg-gray-900/50 border border-white/30 dark:border-gray-800/40 backdrop-blur-xl shadow text-white">
+              <li key={step.title} className="flex flex-col gap-3 p-6 rounded-2xl bg-white/60 dark:bg-gray-900/50 border border-white/30 dark:border-gray-800/40 backdrop-blur-xl shadow text-neutral-900 dark:text-white">
                 <span className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 text-white text-xs font-bold shadow">{step.icon}</span>
-                <h3 className="font-semibold text-sm tracking-wide uppercase text-white">{step.title}</h3>
-                <p className="text-xs text-white/80 leading-relaxed">{step.body}</p>
+                <h3 className="font-semibold text-sm tracking-wide uppercase">{step.title}</h3>
+                <p className="text-xs opacity-80 leading-relaxed">{step.body}</p>
               </li>
             ))}
           </ol>
@@ -148,9 +148,9 @@ export default function LandingPage() {
               </ul>
             </div>
             <div className="relative p-1 rounded-3xl bg-gradient-to-tr from-indigo-500 via-pink-500 to-amber-300 shadow-xl">
-              <div className="rounded-[1.3rem] h-full w-full bg-neutral-50/70 dark:bg-neutral-900/60 backdrop-blur-xl border border-white/40 dark:border-neutral-700 p-8 flex flex-col gap-6 text-white">
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-white/70">Signal Flow</h3>
-                <div className="flex flex-col gap-4 text-xs text-white/80">
+              <div className="rounded-[1.3rem] h-full w-full bg-neutral-50/70 dark:bg-neutral-900/60 backdrop-blur-xl border border-white/40 dark:border-neutral-700 p-8 flex flex-col gap-6 text-neutral-900 dark:text-white">
+                <h3 className="text-sm font-semibold uppercase tracking-wide opacity-70">Signal Flow</h3>
+                <div className="flex flex-col gap-4 text-xs opacity-80">
                   <div className="flex items-center gap-2"><span className="px-2 py-1 rounded bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 font-medium">Focus</span><span className="opacity-70">→ informs task prioritization</span></div>
                   <div className="flex items-center gap-2"><span className="px-2 py-1 rounded bg-pink-500/20 text-pink-600 dark:text-pink-300 font-medium">Tasks</span><span className="opacity-70">→ build streak & completion metrics</span></div>
                   <div className="flex items-center gap-2"><span className="px-2 py-1 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-medium">Expenses</span><span className="opacity-70">→ pattern suggestions & budget cues</span></div>
@@ -172,12 +172,12 @@ export default function LandingPage() {
               { q: 'Can I reset everything?', a: 'Yes—clear site data / local storage or use the export first then clear.' },
               { q: 'Will there be syncing?', a: 'Potentially in the future with end-to-end encryption for more privacy and security.' },
             ].map(item => (
-              <details key={item.q} className="group rounded-xl border border-white/30 dark:border-gray-800/40 bg-white/50 dark:bg-gray-900/40 backdrop-blur-xl p-5 text-white">
+              <details key={item.q} className="group rounded-xl border border-white/30 dark:border-gray-800/40 bg-white/50 dark:bg-gray-900/40 backdrop-blur-xl p-5 text-neutral-900 dark:text-white">
                 <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
-                  <span className="font-medium text-sm text-white">{item.q}</span>
-                  <span className="text-xs text-white/60 group-open:rotate-180 transition">▼</span>
+                  <span className="font-medium text-sm">{item.q}</span>
+                  <span className="text-xs opacity-60 group-open:rotate-180 transition">▼</span>
                 </summary>
-                <p className="mt-3 text-xs sm:text-sm text-white/80 leading-relaxed">{item.a}</p>
+                <p className="mt-3 text-xs sm:text-sm opacity-80 leading-relaxed">{item.a}</p>
               </details>
             ))}
           </div>

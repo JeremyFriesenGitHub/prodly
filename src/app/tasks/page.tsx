@@ -315,9 +315,9 @@ export default function TaskManagerPage() {
 							getting things done.
 						</p>
 						<div className="flex flex-wrap gap-3 items-center text-xs font-semibold">
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">All: {tasks.length}</span>
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">Done: {tasks.filter(t=>t.completed).length}</span>
-							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-white">Progress: {completionPct}%</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-neutral-900 dark:text-white">All: {tasks.length}</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-neutral-900 dark:text-white">Done: {tasks.filter(t=>t.completed).length}</span>
+							<span className="px-3 py-1 rounded-full bg-white/95 dark:bg-gray-900/50 backdrop-blur-xl border border-white/50 dark:border-gray-800/40 text-neutral-900 dark:text-white">Progress: {completionPct}%</span>
 							<span className="px-3 py-1 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow">🔥 Streak: {streak}d</span>
 						</div>
 					</div>
@@ -359,60 +359,60 @@ export default function TaskManagerPage() {
 					aria-label="Add new task"
 				>
 					<div className="md:col-span-2 lg:col-span-2 flex flex-col gap-4">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white">
+			<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-neutral-800 dark:text-white">
 							<span>Title</span>
 							<input
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
 								placeholder="Task title *"
-								className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm text-white"
+				className="w-full px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm text-neutral-900 dark:text-white"
 								aria-label="Task title"
 							/>
 						</label>
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
+			<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-neutral-800 dark:text-white ">
 							<span>Notes <span className="opacity-60 normal-case">(optional)</span></span>
 							<textarea
 								value={notes}
 								onChange={(e) => setNotes(e.target.value)}
 								placeholder="Notes..."
 								rows={2}
-								className="w-full resize-none px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm"
+				className="w-full resize-none px-4 py-3 rounded-xl bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 placeholder:opacity-60 text-sm text-neutral-900 dark:text-white"
 								aria-label="Task notes"
 							/>
 						</label>
 					</div>
 					<div className="flex flex-col gap-3">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
+			<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-neutral-800 dark:text-white ">
 							<span>Priority</span>
 							<select
 								value={priority}
 								onChange={(e) => setPriority(e.target.value as Priority)}
-								className="px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm"
+				className="px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm text-neutral-900 dark:text-white"
 							>
 								<option value="low">Low</option>
 								<option value="medium">Medium</option>
 								<option value="high">High</option>
 							</select>
 						</label>
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white ">
+			<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-neutral-800 dark:text-white ">
 							<span>Due Date</span>
 							<input
 								type="date"
 								value={due}
 								onChange={(e) => setDue(e.target.value)}
-								className="date-input px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm"
+				className="date-input px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm text-neutral-900 dark:text-white"
 							/>
 						</label>
 					</div>
 					<div className="flex flex-col gap-3">
-						<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-white">
+			<label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-neutral-800 dark:text-white">
 							<span>Tags</span>
 							<input
 								value={tagInput}
 								onChange={(e) => setTagInput(e.target.value)}
 								onKeyDown={handleAddTag}
 								placeholder="Press Enter to add"
-								className="px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm"
+				className="px-3 py-2 rounded-lg bg-white/95 dark:bg-gray-800/70 border border-white/50 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm text-neutral-900 dark:text-white"
 							/>
 						</label>
 						<div className="flex flex-wrap gap-2">
@@ -447,7 +447,7 @@ export default function TaskManagerPage() {
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
 								placeholder="Search tasks..."
-								className="px-4 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white"
+								className="px-4 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-neutral-900 dark:text-white"
 							/>
 						</div>
 						<div className="flex flex-col gap-1">
@@ -458,7 +458,7 @@ export default function TaskManagerPage() {
 									const v = e.target.value as 'all' | 'active' | 'completed';
 									setFilterStatus(v);
 								}}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-neutral-900 dark:text-white"
 							>
 								<option value="all">All</option>
 								<option value="active">Active</option>
@@ -472,7 +472,7 @@ export default function TaskManagerPage() {
 								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 									const v = e.target.value as 'all' | Priority; setFilterPriority(v);
 								}}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-neutral-900 dark:text-white"
 							>
 								<option value="all">All</option>
 								<option value="high">High</option>
@@ -487,7 +487,7 @@ export default function TaskManagerPage() {
 								onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 									const v = e.target.value as 'newest' | 'due' | 'priority'; setSort(v);
 								}}
-								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-white "
+								className="px-3 py-2 rounded-xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-neutral-900 dark:text-white"
 							>
 								<option value="newest">Newest</option>
 								<option value="due">Due Date</option>
@@ -555,7 +555,7 @@ export default function TaskManagerPage() {
 				</div>
 
         {/* AI Day Plan */}
-        <section className="rounded-3xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl p-5 text-white">
+	<section className="rounded-3xl bg-white/95 dark:bg-gray-900/50 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl p-5 text-neutral-900 dark:text-white">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold uppercase tracking-wide">AI Day Plan</h3>
             <button
@@ -578,7 +578,7 @@ export default function TaskManagerPage() {
               ))}
             </ol>
           ) : (
-            <div className="text-sm opacity-80">No plan yet — click “Plan my day”.</div>
+			<div className="text-sm opacity-80">No plan yet — click “Plan my day”.</div>
           )}
           {!!nudges.length && (
             <ul className="mt-3 text-xs opacity-90 list-disc pl-4 space-y-1">
@@ -588,7 +588,7 @@ export default function TaskManagerPage() {
         </section>
 
 				{/* Task List */}
-				<section aria-label="Tasks" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 text-white">
+				<section aria-label="Tasks" className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 					{filtered.map((task) => {
 						const gradient = PRIORITY_COLORS[task.priority];
 						return (
@@ -691,7 +691,7 @@ export default function TaskManagerPage() {
 						);
 					})}
 					{filtered.length === 0 && (
-						<div className="col-span-full p-10 text-center rounded-3xl bg-white/95 dark:bg-gray-900/40 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm opacity-80 text-white">
+						<div className="col-span-full p-10 text-center rounded-3xl bg-white/95 dark:bg-gray-900/40 border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-sm opacity-80 text-neutral-900 dark:text-white">
 							No tasks match. Try adjusting filters or add one above.
 						</div>
 					)}

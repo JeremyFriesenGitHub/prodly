@@ -312,7 +312,7 @@ export default function ExpensesPage() {
   }
 
   return (
-    <div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center text-[var(--foreground)] overflow-hidden bg-[var(--background)] font-sans">
+  <div className="relative min-h-screen min-h-dvh w-full flex flex-col items-center text-[var(--foreground)] overflow-hidden bg-[var(--background)] font-sans">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-gradient-to-br from-[#a5b4fc] to-[#818cf8] opacity-30 rounded-full blur-3xl animate-pulse" />
@@ -386,53 +386,53 @@ export default function ExpensesPage() {
         </div>
 
         {/* Form */}
-        <section className="p-6 sm:p-8 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+  <section className="p-6 sm:p-8 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
           <ExpenseForm onAdd={addExpense} defaultDate={todayISO} />
         </section>
 
         {/* Metrics */}
         <section className="grid gap-6 sm:grid-cols-3">
-          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
-            <div className="text-sm opacity-80 text-white">Total Spent</div>
-            <div className="text-3xl font-extrabold mt-1 tabular-nums text-white">{currency(totals)}</div>
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-neutral-900 dark:text-white">
+            <div className="text-sm opacity-80">Total Spent</div>
+            <div className="text-3xl font-extrabold mt-1 tabular-nums">{currency(totals)}</div>
           </div>
-          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
-            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80 text-white">By Category</div>
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-neutral-900 dark:text-white">
+            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80">By Category</div>
             {byCategory.length ? (
               <TinyBarChart data={byCategory.slice(0, 6)} />
             ) : (
-              <div className="text-sm opacity-60 text-white">No data yet</div>
+              <div className="text-sm opacity-60">No data yet</div>
             )}
           </div>
-          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
-            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80 text-white">By Month</div>
+          <div className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-neutral-900 dark:text-white">
+            <div className="mb-3 text-sm font-semibold tracking-wide uppercase opacity-80">By Month</div>
             {byMonth.length ? (
               <TinyBarChart data={byMonth} />
             ) : (
-              <div className="text-sm opacity-60 text-white">No data yet</div>
+              <div className="text-sm opacity-60">No data yet</div>
             )}
           </div>
         </section>
 
         {/* AI Suggestions */}
-        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-neutral-900 dark:text-white">
           <div className="mb-3 flex items-center justify-between">
-            <div className="text-sm font-semibold tracking-wide uppercase opacity-80 text-white">AI Suggestions</div>
+            <div className="text-sm font-semibold tracking-wide uppercase opacity-80">AI Suggestions</div>
             <Button variant="ghost" onClick={askAiForExpenses} disabled={asking}>
               {asking ? "Thinking..." : "Refresh"}
             </Button>
           </div>
           {aiTips.length ? (
-            <ul className="list-disc pl-5 space-y-1 text-sm text-white">
+            <ul className="list-disc pl-5 space-y-1 text-sm">
               {aiTips.map((s, i) => <li key={i}>{s}</li>)}
             </ul>
           ) : (
-            <div className="text-sm opacity-60 text-white">No suggestions yet — click “Ask AI”.</div>
+            <div className="text-sm opacity-60">No suggestions yet — click “Ask AI”.</div>
           )}
         </section>
 
         {/* Table */}
-        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl">
+        <section className="p-6 rounded-3xl bg-white/95 dark:bg-gray-900/50 shadow-xl border border-white/50 dark:border-gray-800/40 backdrop-blur-xl text-neutral-900 dark:text-white">
           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Input
               placeholder="Search by description, category, or date yyyy-mm-dd"
@@ -440,17 +440,17 @@ export default function ExpensesPage() {
               onChange={(e) => setQuery(e.target.value)}
               className="sm:max-w-md"
             />
-            <div className="text-sm opacity-70 text-white">{filtered.length} item(s)</div>
+            <div className="text-sm opacity-70">{filtered.length} item(s)</div>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="text-left opacity-80">
-                  <th className="px-2 py-2 text-white">Date</th>
-                  <th className="px-2 py-2 text-white">Category</th>
-                  <th className="px-2 py-2 text-white">Description</th>
-                  <th className="px-2 py-2 text-right text-white">Amount</th>
-                  <th className="px-2 py-2 text-right text-white">Actions</th>
+                  <th className="px-2 py-2">Date</th>
+                  <th className="px-2 py-2">Category</th>
+                  <th className="px-2 py-2">Description</th>
+                  <th className="px-2 py-2 text-right">Amount</th>
+                  <th className="px-2 py-2 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -459,7 +459,7 @@ export default function ExpensesPage() {
                 ))}
                 {!filtered.length && (
                   <tr>
-                    <td colSpan={5} className="px-2 py-6 text-center opacity-60 text-white">
+                    <td colSpan={5} className="px-2 py-6 text-center opacity-60">
                       No expenses yet. Add your first one above!
                     </td>
                   </tr>
