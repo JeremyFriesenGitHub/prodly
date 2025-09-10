@@ -716,10 +716,10 @@ export default function TaskManagerPage() {
 				@keyframes particle3 { 0% { transform: translateX(0) scale(1); opacity: 0.5; } 50% { transform: translateX(20px) scale(1.1); opacity: 0.7; } 100% { transform: translateX(0) scale(1); opacity: 0.5; } }
 				.animate-particle3 { animation: particle3 3.7s ease-in-out infinite; }
 				.stroke-gradient { stroke: url(#gradStroke); }
-				/* Make native date picker icon appear white (light mode) */
-				.date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.8); opacity: 0.9; }
-				.date-input { color: #fff; caret-color: #fff; }
-				:global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: none; }
+				/* Date input: readable in light/dark; invert icon only in dark mode */
+				.date-input { color: inherit; caret-color: currentColor; }
+				.date-input::-webkit-calendar-picker-indicator { filter: none; opacity: 0.9; }
+				:global(html.dark) .date-input::-webkit-calendar-picker-indicator { filter: invert(1) brightness(1.6); }
 				/* hide scrollbar for horizontal nav scroller */
 				.no-scrollbar::-webkit-scrollbar { display: none; }
 				.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
